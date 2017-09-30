@@ -47,5 +47,8 @@ $(TARGET).mot : $(TARGET)
 
 image : $(TARGET).mot
 
+write: $(TARGET).mot
+	h8write -3069 -f20 $(TARGET).mot com1
+
 clean :
 	rm -f $(OBJS) $(TARGET) $(TARGET).elf $(TARGET).mot
