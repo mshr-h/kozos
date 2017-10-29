@@ -81,6 +81,7 @@ int putc(unsigned char c) {
 
 unsigned char getc(void) {
 	unsigned char c = serial_recv_byte(SERIAL_DEFAULT_DEVICE);
+
 	putc(c); // echo back
 
 	if (c == '\r') {
