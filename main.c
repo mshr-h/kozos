@@ -1,9 +1,10 @@
 #include "defines.h"
 #include "serial.h"
 #include "xmodem.h"
+#include "elf.h"
 #include "lib.h"
 
-static init(void) {
+static int init(void) {
 	extern int erodata, data_start, edata, bss_start, ebss;
 
 	// initialize data and bss sections
@@ -72,6 +73,8 @@ int main(void) {
 			putxval(size, 0);
 			puts("\n");
 			dump(loadbuf, size);
+		} else if (!strcmp(buf, "run")) {
+			elf_load(loadbuf);
 		} else {
 			puts("unknown command.\n");
 		}
