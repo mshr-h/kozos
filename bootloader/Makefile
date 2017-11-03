@@ -13,10 +13,11 @@ OBJDUMP = $(BINDIR)/$(ADDNAME)objdump
 RANLIB  = $(BINDIR)/$(ADDNAME)ranlib
 STRIP   = $(BINDIR)/$(ADDNAME)strip
 
-OBJS  = vector.o startup.o main.o
+OBJS  = vector.o startup.o intr.o main.o interrupt.o
 OBJS += lib.o serial.o xmodem.o elf.o
 
 TARGET = kzload
+DEVICE = /dev/ttyS1
 
 CFLAGS = -Wall -mh -nostdinc -nostdlib -fno-builtin
 CFLAGS += -I.
@@ -28,6 +29,7 @@ LFLAGS = -static -T ld.scr -L.
 
 .SUFFIXES: .c .o
 .SUFFIXES: .s .o
+.SUFFIXES: .S .o
 
 all : $(TARGET)
 
@@ -42,13 +44,16 @@ $(TARGET) : $(OBJS)
 .s.o : $<
 	$(CC) -c $(CFLAGS) $<
 
+.S.o : $<
+	$(CC) -c $(CFLAGS) $<
+
 $(TARGET).mot : $(TARGET)
 	$(OBJCOPY) -O srec $(TARGET) $(TARGET).mot
 
 image : $(TARGET).mot
 
 write: $(TARGET).mot
-	h8write -3069 -f20 $(TARGET).mot com1
+	sudo ../h8writer/h8write -3069 -f20 $(TARGET).mot $(DEVICE)
 
 clean :
 	rm -f $(OBJS) $(TARGET) $(TARGET).elf $(TARGET).mot
