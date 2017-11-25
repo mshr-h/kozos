@@ -13,8 +13,12 @@ _intr_softerr:
 	mov.l er1,@-er7
 	mov.l er0,@-er7
 	mov.l er7,er1
+	mov.l #_intrstack,sp // set stack pointer to interrupt stack
+	mov.l er1,@-er7      // store old stack pointer to interrupt stack
 	mov.w #SOFTVEC_TYPE_SOFTERR,r0
 	jsr	  @_interrupt
+	mov.l @er7+,er1     // restore old stack pointer from interrupt stack
+	mov.l er1,sp
 	mov.l @er7+,er0
 	mov.l @er7+,er1
 	mov.l @er7+,er2
