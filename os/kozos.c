@@ -31,6 +31,7 @@ typedef struct _kz_thread {
 	} syscall;
 
 	kz_context context;
+	char dummy[16];
 } kz_thread;
 
 static struct {
