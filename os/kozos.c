@@ -142,9 +142,9 @@ static int thread_exit(void) {
 	return 0;
 }
 
-static int setintr(softvec_type_t type, kz_handler_t handler) {
-	static void thread_intr(softvec_type_t type, unsigned long sp);
+static void thread_intr(softvec_type_t type, unsigned long sp);
 
+static int setintr(softvec_type_t type, kz_handler_t handler) {
 	softvec_setintr(type, thread_intr);
 	handlers[type] = handler;
 
